@@ -2,70 +2,46 @@ function average (r, l) {
     return Math.floor((r + l) / 2);
 }
 
-function sortedFrequency(array, target) {
+function findTarget(array, target) {
     let r = array.length - 1;
     let l = 0;
-    let tr = average(r,l);
-    let tl = average(r,l);
+    let m = average(r,l);
 
-    while (array[tl] !== target || array[tl - 1] === target) {
-
-        if (tl === l || tl === r) {
-            break
-        }
-
-        if (array[tl] < target) {
-            if (tl === r - 1) {
-                tl ++;
-            }
-            l = tl;
-            tl = average(tl, r)
+    while (l <= r) {
+        if (array[m] < target) {
+            l = m + 1;
+            m = average(l, r)
             continue;
-        }
-
-        if (array[tl] >= target) {
-            if (tl === l + 1) {
-                tl --;
-            }
-            r = tl;
-            tl = average(tl,l);
+        } else if (array[m] > target) {
+            r = m - 1;
+            m = average(r,l);
             continue;
-        }        
+        } else {
+            return m;
+        }   
     }
+    return -1;
+}
 
-    r = array.length - 1;
-    l = 0;
-
-    while (array[tr] !== target || array[tr + 1] === target) {
-
-        console.log("right is still running, tr: ", tr, "array[tr]: ", array[tr], "target: ", target);
-
-        if (tr === l || tr === r) {
-            break
-        }
-
-        if (array[tr] <= target) {
-            if (tr === r - 1) {
-                tr ++;
-            }
-            tr = average(tr, r)
-            continue;
-        }
-
-        if (array[tr] > target) {
-            tr = average(tr,l);
-            continue;
-        }        
+function findTargetRange (array, target, targetIdx) {
+    let l = targetIdx;
+    let r = targetIdx;
+    while (array[l] === target) {
+        l--;
     }
-
-    if (tr !== target && tl !== target ) {
-        return -1;
+    l++;
+    while (array[r] === target) {
+        r++;
     }
+    return r - l
+}
 
-    console.log("tr:", tr, "tl: ", tl);
-    const ts = array.slice(tl, tr + 1);
-    console.log("ts: ",ts, "ts.length: ", ts.length);
-    return ts.length;
+function sortedFrequency(array, target) {
+    const targetIdx = findTarget(array,target);
+    if (targetIdx === -1) {
+        return targetIdx;
+    }
+    return findTargetRange(array, target, targetIdx);
 }
 
 module.exports = sortedFrequency

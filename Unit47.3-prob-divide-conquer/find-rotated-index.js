@@ -30,8 +30,6 @@ function findRotatedIndex(array, num) {
         sortedArr = [...array.slice(p, array.length), ...array.slice(0,p)]
     }
 
-    console.log(sortedArr);
-
     while (l <= r) {
         let m = average(r,l);
         if (sortedArr[m] === num) {
